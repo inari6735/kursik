@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block body %}
+    {% include 'course/_flashes.html.twig' %}
+
+    <p><a href="{{ path('course_index') }}">&larr; Back to courses</a></p>
+
+    <h1>{{ course.title }}</h1>
+
+    <p><strong>Status:</strong> {{ course.status }}</p>
+    <p><strong>Created:</strong> {{ course.createdAt|date('Y-m-d H:i') }}</p>
+    {% if course.publishedAt %}
+        <p><strong>Published:</strong> {{ course.publishedAt|date('Y-m-d H:i') }}</p>
+    {% endif %}
+
+    {% if course.description is not empty %}
+        <p>{{ course.description|nl2br }}</p>
+    {% endif %}
+
+    {% if course.status == 'draft' %}
+        <p><a href="{{ path('course_rename', {id: course.id}) }}">Rename</a></p>
+
+        <form action="{{ path('course_publish', {id: course.id}) }}" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token('publish-course-' ~ course.id) }}">
+            <button type="submit">Publish</button>
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block body %}
+    {% include 'course/_flashes.html.twig' %}
+
+    <h1>Courses</h1>
+
+    <p><a href="{{ path('course_new') }}">Create a new course</a></p>
+
+    {% if courses is empty %}
+        <p>No courses yet. The list is projected asynchronously — if you just created one, make sure the worker is running (<code>php bin/console messenger:consume async</code>) and refresh.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td><a href="{{ path('course_show', {id: course.id}) }}">{{ course.title }}</a></td>
+                        <td>{{ course.status }}</td>
+                        <td>{{ course.createdAt|date('Y-m-d H:i') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

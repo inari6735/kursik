@@ -22,6 +22,10 @@ framework:
             messenger.bus.query:
                 middleware:
                     - validation
+            messenger.bus.event:
+                default_middleware:
+                    enabled: true
+                    allow_no_handlers: true
 
         routing:
             Symfony\Component\Mailer\Messenger\SendEmailMessage: async
@@ -30,3 +34,8 @@ framework:
 
             App\Shared\Application\Transport\AsyncTransport: async
             App\Shared\Application\Transport\SyncTransport: sync
+
+            # Domain events fan out to both transports: the sync one runs critical
+            # projectors in the command transaction, the async one feeds the worker.
+            # Projectors pick their side via AsMessageHandler(fromTransport: ...).
+            App\Shared\Domain\DomainEvent: [sync, async]

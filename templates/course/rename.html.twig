@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rename {{ course.title }}{% endblock %}
+
+{% block body %}
+    {% include 'course/_flashes.html.twig' %}
+
+    <p><a href="{{ path('course_show', {id: course.id}) }}">&larr; Back to course</a></p>
+
+    <h1>Rename &laquo;{{ course.title }}&raquo;</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        <button type="submit">Save</button>
+    {{ form_end(form) }}
+{% endblock %}

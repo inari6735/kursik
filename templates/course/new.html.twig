@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New course{% endblock %}
+
+{% block body %}
+    {% include 'course/_flashes.html.twig' %}
+
+    <p><a href="{{ path('course_index') }}">&larr; Back to courses</a></p>
+
+    <h1>New course</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        <button type="submit">Create</button>
+    {{ form_end(form) }}
+{% endblock %}

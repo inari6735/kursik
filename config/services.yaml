@@ -16,8 +16,8 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\Shared\Application\CommandBus: '@App\Shared\Infrastructure\MessengerCommandBus'
-    App\Shared\Application\QueryBus: '@App\Shared\Infrastructure\MessengerQueryBus'
+    App\Shared\Application\Bus\CommandBus: '@App\Shared\Infrastructure\MessengerCommandBus'
+    App\Shared\Application\Bus\QueryBus: '@App\Shared\Infrastructure\MessengerQueryBus'
 
     App\Shared\Infrastructure\MessengerCommandBus:
         arguments:
@@ -28,13 +28,35 @@ services:
             $queryBus: '@messenger.bus.query'
 
 
-    App\Shared\Infrastructure\EventStore\EventTypeRegistry: ~
+    App\Shared\Infrastructure\EventStore\EventTypeRegistry:
+        arguments:
+            $eventClasses:
+                - App\Course\Domain\Event\CourseCreated
+                - App\Course\Domain\Event\CourseRenamed
+                - App\Course\Domain\Event\CoursePublished
 
     App\Shared\Infrastructure\EventStore\NoOpUpcaster: ~
     App\Shared\Infrastructure\EventStore\Upcaster: '@App\Shared\Infrastructure\EventStore\NoOpUpcaster'
 
     App\Shared\Infrastructure\EventStore\DbalEventStore: ~
     App\Shared\Infrastructure\EventStore\EventStore: '@App\Shared\Infrastructure\EventStore\DbalEventStore'
+
+    App\Shared\Infrastructure\SystemClock: ~
+    App\Shared\Domain\Clock: '@App\Shared\Infrastructure\SystemClock'
+
+    # Course module: register Application/Infrastructure/Presentation as services.
+    # Domain stays out of the container — aggregates, events and value objects are
+    # created in code, never injected.
+    App\Course\:
+        resource: '../src/Course/'
+        exclude: '../src/Course/Domain/'
+
+    App\Course\Infrastructure\EventStoreCourseRepository:
+        arguments:
+            $eventBus: '@messenger.bus.event'
+    App\Course\Domain\CourseRepository: '@App\Course\Infrastructure\EventStoreCourseRepository'
+
+    App\Course\Application\Query\CourseReadModel: '@App\Course\Infrastructure\ReadModel\CourseReadModelRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
