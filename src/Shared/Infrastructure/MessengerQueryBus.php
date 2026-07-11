@@ -2,8 +2,8 @@
 
 namespace App\Shared\Infrastructure;
 
-use App\Shared\Application\Query;
-use App\Shared\Application\QueryBus;
+use App\Shared\Application\Bus\Query;
+use App\Shared\Application\Bus\QueryBus;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 

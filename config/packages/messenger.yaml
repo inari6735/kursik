@@ -28,5 +28,5 @@ framework:
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
 
-            App\Shared\Application\AsyncTransport: async
-            App\Shared\Application\SyncTransport: sync
+            App\Shared\Application\Transport\AsyncTransport: async
+            App\Shared\Application\Transport\SyncTransport: sync

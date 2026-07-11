@@ -2,8 +2,8 @@
 
 namespace App\Shared\Infrastructure;
 
-use App\Shared\Application\Command;
-use App\Shared\Application\CommandBus;
+use App\Shared\Application\Bus\Command;
+use App\Shared\Application\Bus\CommandBus;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 

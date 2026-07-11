@@ -28,5 +28,13 @@ services:
             $queryBus: '@messenger.bus.query'
 
 
+    App\Shared\Infrastructure\EventStore\EventTypeRegistry: ~
+
+    App\Shared\Infrastructure\EventStore\NoOpUpcaster: ~
+    App\Shared\Infrastructure\EventStore\Upcaster: '@App\Shared\Infrastructure\EventStore\NoOpUpcaster'
+
+    App\Shared\Infrastructure\EventStore\DbalEventStore: ~
+    App\Shared\Infrastructure\EventStore\EventStore: '@App\Shared\Infrastructure\EventStore\DbalEventStore'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
