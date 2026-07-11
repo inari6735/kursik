@@ -19,6 +19,19 @@
         {% endif %}
     </head>
     <body>
+        <nav>
+            <a href="{{ path('course_index') }}">Courses</a>
+            {% if app.user %}
+                <span>{{ app.user.userIdentifier }}</span>
+                <form action="{{ logout_path() }}" method="post" style="display: inline">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                    <button type="submit">Log out</button>
+                </form>
+            {% else %}
+                <a href="{{ path('app_login') }}">Log in</a>
+                <a href="{{ path('app_register') }}">Register</a>
+            {% endif %}
+        </nav>
         {% block body %}{% endblock %}
     </body>
 </html>

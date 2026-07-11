@@ -1,0 +1,14 @@
+lexik_jwt_authentication:
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    # Access token TTL: 15 minutes. Kept short — a stolen token expires quickly;
+    # the refresh token (7 days) keeps the user logged in via silent rotation.
+    token_ttl: 900
+    token_extractors:
+        # The whole app authenticates via an HttpOnly cookie, not the Authorization header.
+        authorization_header:
+            enabled: false
+        cookie:
+            enabled: true
+            name: AUTH_TOKEN

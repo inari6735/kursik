@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% include 'course/_flashes.html.twig' %}
+
+    <h1>Register</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        <button type="submit">Create account</button>
+    {{ form_end(form) }}
+
+    <p>Already have an account? <a href="{{ path('app_login') }}">Log in</a></p>
+{% endblock %}

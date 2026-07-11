@@ -58,5 +58,15 @@ services:
 
     App\Course\Application\Query\CourseReadModel: '@App\Course\Infrastructure\ReadModel\CourseReadModelRepository'
 
+    # User module: Domain holds the ORM entity (not a service); RefreshToken is
+    # an entity too, so it stays out of the container as well.
+    App\User\:
+        resource: '../src/User/'
+        exclude:
+            - '../src/User/Domain/'
+            - '../src/User/Infrastructure/Security/RefreshToken.php'
+
+    App\User\Domain\UserRepository: '@App\User\Infrastructure\DoctrineUserRepository'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

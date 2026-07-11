@@ -1,0 +1,5 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\User\Infrastructure\Security\RefreshToken
+    # Refresh token TTL: 7 days — the maximum "session" length without re-login.
+    ttl: 604800
+    single_use: true

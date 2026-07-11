@@ -19,7 +19,7 @@
         <p>{{ course.description|nl2br }}</p>
     {% endif %}
 
-    {% if course.status == 'draft' %}
+    {% if course.status == 'draft' and app.user %}
         <p><a href="{{ path('course_rename', {id: course.id}) }}">Rename</a></p>
 
         <form action="{{ path('course_publish', {id: course.id}) }}" method="post">

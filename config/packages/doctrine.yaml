@@ -2,6 +2,11 @@ doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
 
+        # Tables owned by hand-written DBAL code (event store, read-model projections,
+        # Messenger transport) — invisible to the ORM schema tool so schema:update /
+        # migrations:diff never try to drop them.
+        schema_filter: '~^(?!event_store|course_detail|course_list|messenger_messages)~'
+
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '16'
@@ -14,12 +19,14 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
-#            App:
-#                type: attribute
-#                is_bundle: false
-#                dir: '%kernel.project_dir%/src/Entity'
-#                prefix: 'App\Entity'
-#                alias: App
+            # Attribute driver scans src/ and maps only classes carrying #[ORM\Entity]
+            # (currently the User context; event-sourced contexts have no entities).
+            App:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src'
+                prefix: 'App'
+                alias: App
 
 when@test:
     doctrine:
