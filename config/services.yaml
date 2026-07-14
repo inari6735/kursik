@@ -28,12 +28,9 @@ services:
             $queryBus: '@messenger.bus.query'
 
 
-    App\Shared\Infrastructure\EventStore\EventTypeRegistry:
-        arguments:
-            $eventClasses:
-                - App\Course\Domain\Event\CourseCreated
-                - App\Course\Domain\Event\CourseRenamed
-                - App\Course\Domain\Event\CoursePublished
+    # No event-sourced contexts at the moment — register event classes here
+    # when a context starts using the event store again.
+    App\Shared\Infrastructure\EventStore\EventTypeRegistry: ~
 
     App\Shared\Infrastructure\EventStore\NoOpUpcaster: ~
     App\Shared\Infrastructure\EventStore\Upcaster: '@App\Shared\Infrastructure\EventStore\NoOpUpcaster'
@@ -44,17 +41,12 @@ services:
     App\Shared\Infrastructure\SystemClock: ~
     App\Shared\Domain\Clock: '@App\Shared\Infrastructure\SystemClock'
 
-    # Course module: register Application/Infrastructure/Presentation as services.
-    # Domain stays out of the container — aggregates, events and value objects are
-    # created in code, never injected.
+    # Course module: Domain holds the ORM entity and value objects (not services).
     App\Course\:
         resource: '../src/Course/'
         exclude: '../src/Course/Domain/'
 
-    App\Course\Infrastructure\EventStoreCourseRepository:
-        arguments:
-            $eventBus: '@messenger.bus.event'
-    App\Course\Domain\CourseRepository: '@App\Course\Infrastructure\EventStoreCourseRepository'
+    App\Course\Domain\CourseRepository: '@App\Course\Infrastructure\DoctrineCourseRepository'
 
     App\Course\Application\Query\CourseReadModel: '@App\Course\Infrastructure\ReadModel\CourseReadModelRepository'
 

@@ -7,6 +7,9 @@ use App\Course\Application\Query\CourseListItem;
 use App\Course\Application\Query\CourseReadModel;
 use Doctrine\DBAL\Connection;
 
+/**
+ * Read side over the courses table — plain DBAL, no entity hydration.
+ */
 final readonly class CourseReadModelRepository implements CourseReadModel
 {
     public function __construct(
@@ -17,7 +20,7 @@ final readonly class CourseReadModelRepository implements CourseReadModel
     public function find(string $courseId): ?CourseDetail
     {
         $row = $this->connection->fetchAssociative(
-            'SELECT id, title, description, status, created_at, published_at FROM course_detail WHERE id = :id',
+            'SELECT id, title, description, status, created_at, published_at FROM courses WHERE id = :id',
             ['id' => $courseId],
         );
 
@@ -38,7 +41,7 @@ final readonly class CourseReadModelRepository implements CourseReadModel
     public function all(): array
     {
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT id, title, status, created_at FROM course_list ORDER BY created_at DESC, id',
+            'SELECT id, title, status, created_at FROM courses ORDER BY created_at DESC, id',
         );
 
         return array_map(

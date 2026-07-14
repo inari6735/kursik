@@ -14,7 +14,6 @@ use App\Course\Domain\Exception\CourseAlreadyPublished;
 use App\Course\Presentation\Form\CourseType;
 use App\Shared\Application\Bus\CommandBus;
 use App\Shared\Application\Bus\QueryBus;
-use App\Shared\Infrastructure\EventStore\ConcurrencyException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,8 +84,6 @@ final class CourseController extends AbstractController
                 $this->addFlash('success', 'Course renamed.');
             } catch (CourseAlreadyPublished) {
                 $this->addFlash('error', 'A published course cannot be renamed.');
-            } catch (ConcurrencyException) {
-                $this->addFlash('error', 'The course was modified by someone else — please try again.');
             }
 
             return $this->redirectToRoute('course_show', ['id' => $id]);
@@ -111,8 +108,6 @@ final class CourseController extends AbstractController
             $this->addFlash('success', 'Course published.');
         } catch (CourseAlreadyPublished) {
             $this->addFlash('warning', 'This course is already published.');
-        } catch (ConcurrencyException) {
-            $this->addFlash('error', 'The course was modified by someone else — please try again.');
         }
 
         return $this->redirectToRoute('course_show', ['id' => $id]);
