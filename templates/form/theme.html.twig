@@ -1,0 +1,34 @@
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+    <div class="mb-4 space-y-1.5 last:mb-0">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock -%}
+
+{%- block form_label -%}
+    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' block text-sm font-medium text-zinc-700')|trim}) -%}
+    {{ parent() }}
+{%- endblock -%}
+
+{%- block form_widget_simple -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-accent focus:outline-2 focus:outline-accent')|trim}) -%}
+    {{ parent() }}
+{%- endblock -%}
+
+{%- block textarea_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-accent focus:outline-2 focus:outline-accent')|trim}) -%}
+    {{ parent() }}
+{%- endblock -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="mt-1 space-y-0.5 text-sm text-red-600">
+            {%- for error in errors -%}
+                <li>{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock -%}

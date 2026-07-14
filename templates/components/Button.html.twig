@@ -1,0 +1,18 @@
+{% props variant = 'primary', href = null, type = 'submit', fullWidth = false %}
+
+{% set base = 'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50' %}
+{% set variants = {
+    primary: 'bg-accent text-white hover:bg-accent-hover',
+    danger: 'bg-red-600 text-white hover:bg-red-700',
+    ghost: 'text-zinc-700 hover:bg-zinc-100',
+} %}
+{% set classes = base ~ ' ' ~ variants[variant]|default(variants.primary) ~ (fullWidth ? ' w-full' : '') %}
+
+{# Captured once — Twig forbids defining the same block in both if-branches. #}
+{% set label %}{% block content %}{% endblock %}{% endset %}
+
+{% if href %}
+    <a href="{{ href }}" {{ attributes.defaults({class: classes}) }}>{{ label }}</a>
+{% else %}
+    <button type="{{ type }}" {{ attributes.defaults({class: classes}) }}>{{ label }}</button>
+{% endif %}

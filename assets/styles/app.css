@@ -1,3 +1,18 @@
-body {
-    background-color: skyblue;
+@import "tailwindcss";
+
+/*
+ * Design tokens — the only source of project-specific colors.
+ * Rule 7: components use these (and the standard Tailwind scale), never raw values.
+ */
+@theme {
+    /* Accent (indigo) */
+    --color-accent: oklch(51.1% 0.262 276.966);        /* indigo-600 */
+    --color-accent-hover: oklch(45.7% 0.24 277.023);   /* indigo-700 */
+    --color-accent-soft: oklch(96.2% 0.018 272.314);   /* indigo-50  */
+
+    /* Course statuses */
+    --color-status-draft: oklch(47.3% 0.137 46.201);        /* amber-800 */
+    --color-status-draft-soft: oklch(96.2% 0.059 95.617);   /* amber-50  */
+    --color-status-published: oklch(43.2% 0.095 166.913);   /* emerald-800 */
+    --color-status-published-soft: oklch(97.9% 0.021 166.113); /* emerald-50 */
 }

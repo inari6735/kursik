@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register — kursik{% endblock %}
 
 {% block body %}
-    {% include 'course/_flashes.html.twig' %}
+    <twig:AuthCard title="Register">
+        {{ form_start(form) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.plainPassword.first) }}
+            {{ form_row(form.plainPassword.second) }}
+            <twig:Button fullWidth>Create account</twig:Button>
+        {{ form_end(form) }}
 
-    <h1>Register</h1>
-
-    {{ form_start(form) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.plainPassword.first) }}
-        {{ form_row(form.plainPassword.second) }}
-        <button type="submit">Create account</button>
-    {{ form_end(form) }}
-
-    <p>Already have an account? <a href="{{ path('app_login') }}">Log in</a></p>
+        <twig:block name="footer">
+            Already have an account? <twig:Link href="{{ path('app_login') }}">Log in</twig:Link>
+        </twig:block>
+    </twig:AuthCard>
 {% endblock %}

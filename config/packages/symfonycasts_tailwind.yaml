@@ -1,0 +1,4 @@
+symfonycasts_tailwind:
+    # Tailwind v4: config lives in CSS (@theme in assets/styles/app.css),
+    # no tailwind.config.js. Version pinned the way tailwind:init would.
+    binary_version: 'v4.3.2'

@@ -1,0 +1,11 @@
+{% props type = 'success' %}
+
+{% set styles = {
+    success: 'border-emerald-200 bg-status-published-soft text-status-published',
+    error: 'border-red-200 bg-red-50 text-red-800',
+    warning: 'border-amber-200 bg-status-draft-soft text-status-draft',
+} %}
+
+<div role="alert" {{ attributes.defaults({class: 'rounded-lg border px-4 py-3 text-sm ' ~ styles[type]|default(styles.success)}) }}>
+    {% block content %}{% endblock %}
+</div>

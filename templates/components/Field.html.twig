@@ -1,0 +1,19 @@
+{# Field for hand-written (non-Symfony-Form) forms: bound label + input.
+   Stacking rhythm (mb-4) lives here so pages stay utility-free (rule 1). #}
+{% props label, name, type = 'text', value = '', required = false, autofocus = false, autocomplete = null %}
+
+{% set id = 'field-' ~ name|replace({'_': '-'})|trim('-', 'left') %}
+
+<div class="mb-4 space-y-1.5 last:mb-0">
+    <label for="{{ id }}" class="block text-sm font-medium text-zinc-700">{{ label }}</label>
+    <input
+        type="{{ type }}"
+        id="{{ id }}"
+        name="{{ name }}"
+        value="{{ value }}"
+        {%- if required %} required{% endif %}
+        {%- if autofocus %} autofocus{% endif %}
+        {%- if autocomplete %} autocomplete="{{ autocomplete }}"{% endif %}
+        class="block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-accent focus:outline-2 focus:outline-accent"
+    >
+</div>

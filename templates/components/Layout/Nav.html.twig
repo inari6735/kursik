@@ -1,0 +1,18 @@
+<nav class="border-b border-zinc-200 bg-white">
+    <div class="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+        <a href="{{ path('course_index') }}" class="text-base font-semibold text-accent">kursik</a>
+
+        <div class="flex items-center gap-3">
+            {% if app.user %}
+                <span class="text-sm text-zinc-500">{{ app.user.userIdentifier }}</span>
+                <form action="{{ logout_path() }}" method="post">
+                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('logout') }}">
+                    <twig:Button variant="ghost">Log out</twig:Button>
+                </form>
+            {% else %}
+                <twig:Button variant="ghost" href="{{ path('app_login') }}">Log in</twig:Button>
+                <twig:Button href="{{ path('app_register') }}">Register</twig:Button>
+            {% endif %}
+        </div>
+    </div>
+</nav>
