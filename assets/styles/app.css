@@ -1,14 +1,54 @@
 @import "tailwindcss";
 
 /*
- * Design tokens — the only source of project-specific colors.
+ * Design tokens — the only source of project-specific colors and fonts.
  * Rule 7: components use these (and the standard Tailwind scale), never raw values.
+ *
+ * Palette:  primary #8FD9FB · secondary #1E3A5F · accent #26C6DA
+ *           cta #FF9F1C · background #F8FCFF · text #263238
  */
 @theme {
-    /* Accent (indigo) */
-    --color-accent: oklch(51.1% 0.262 276.966);        /* indigo-600 */
-    --color-accent-hover: oklch(45.7% 0.24 277.023);   /* indigo-700 */
-    --color-accent-soft: oklch(96.2% 0.018 272.314);   /* indigo-50  */
+    /* Typography — Manrope (variable font) loaded from Google Fonts in base.html.twig */
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+    /* Type scale — each token carries size, line-height and weight.
+       Body 16/400 = text-base, small 14/400 = text-sm, metadata 12/400 = text-xs
+       (Tailwind defaults already match the scheme). */
+    --text-hero: 3.5rem;              /* 56px */
+    --text-hero--line-height: 1.05;
+    --text-hero--font-weight: 800;
+    --text-h1: 2.75rem;               /* 44px */
+    --text-h1--line-height: 1.1;
+    --text-h1--font-weight: 700;
+    --text-h2: 2rem;                  /* 32px */
+    --text-h2--line-height: 1.2;
+    --text-h2--font-weight: 700;
+    --text-h3: 1.5rem;                /* 24px */
+    --text-h3--line-height: 1.3;
+    --text-h3--font-weight: 700;
+    --text-h4: 1.25rem;               /* 20px */
+    --text-h4--line-height: 1.4;
+    --text-h4--font-weight: 600;
+    --text-h5: 1.125rem;              /* 18px */
+    --text-h5--line-height: 1.4;
+    --text-h5--font-weight: 600;
+    --text-h6: 1rem;                  /* 16px */
+    --text-h6--line-height: 1.5;
+    --text-h6--font-weight: 600;
+    --text-lead: 1.25rem;             /* 20px */
+    --text-lead--line-height: 1.6;
+    --text-lead--font-weight: 400;
+
+    /* Brand palette */
+    --color-primary: #8FD9FB;       /* soft highlights, chips */
+    --color-secondary: #1E3A5F;     /* brand, emphasis */
+    --color-accent: #26C6DA;        /* links, focus, active states */
+    --color-accent-hover: #1FAEC2;
+    --color-accent-soft: #E5F9FC;
+    --color-cta: #FF9F1C;           /* primary action buttons */
+    --color-cta-hover: #E8890B;
+    --color-background: #F8FCFF;    /* page background */
+    --color-ink: #263238;           /* main text */
 
     /* Course statuses */
     --color-status-draft: oklch(47.3% 0.137 46.201);        /* amber-800 */
