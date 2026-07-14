@@ -19,12 +19,16 @@
         <p>{{ course.description|nl2br }}</p>
     {% endif %}
 
-    {% if course.status == 'draft' and app.user %}
-        <p><a href="{{ path('course_rename', {id: course.id}) }}">Rename</a></p>
+    {% if course.status == 'draft' %}
+        {% if is_granted('course.rename') %}
+            <p><a href="{{ path('course_rename', {id: course.id}) }}">Rename</a></p>
+        {% endif %}
 
-        <form action="{{ path('course_publish', {id: course.id}) }}" method="post">
-            <input type="hidden" name="_token" value="{{ csrf_token('publish-course-' ~ course.id) }}">
-            <button type="submit">Publish</button>
-        </form>
+        {% if is_granted('course.publish') %}
+            <form action="{{ path('course_publish', {id: course.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('publish-course-' ~ course.id) }}">
+                <button type="submit">Publish</button>
+            </form>
+        {% endif %}
     {% endif %}
 {% endblock %}

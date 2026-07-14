@@ -1,0 +1,19 @@
+{% props active %}
+
+{% set tabs = [
+    {key: 'users', label: 'Users', href: path('admin_users')},
+    {key: 'roles', label: 'Roles', href: path('admin_roles')},
+] %}
+
+<div class="mb-6 border-b border-zinc-200">
+    <div class="flex items-center gap-6">
+        <span class="py-3 text-sm font-semibold text-zinc-400">Admin</span>
+        {% for tab in tabs %}
+            <a href="{{ tab.href }}" class="{{ tab.key == active
+                ? 'border-b-2 border-accent py-3 text-sm font-medium text-zinc-900'
+                : 'py-3 text-sm font-medium text-zinc-500 hover:text-zinc-800' }}">
+                {{- tab.label -}}
+            </a>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin — New role{% endblock %}
+
+{% block body %}
+    <twig:Layout:AdminNav active="roles" />
+    <twig:PageHeader title="New role" />
+
+    <twig:Card>
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            <twig:FormActions>
+                <twig:Button>Create role</twig:Button>
+                <twig:Button variant="ghost" href="{{ path('admin_roles') }}">Cancel</twig:Button>
+            </twig:FormActions>
+        {{ form_end(form) }}
+    </twig:Card>
+{% endblock %}

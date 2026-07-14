@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin — Roles{% endblock %}
+
+{% block body %}
+    <twig:Layout:AdminNav active="roles" />
+    <twig:PageHeader title="Roles">
+        <twig:block name="actions">
+            <twig:Button href="{{ path('admin_role_new') }}">New role</twig:Button>
+        </twig:block>
+    </twig:PageHeader>
+
+    <twig:Table>
+        <twig:block name="head">
+            <twig:Th>Name</twig:Th>
+            <twig:Th>Permissions</twig:Th>
+            <twig:Th>Users</twig:Th>
+            <twig:Th />
+        </twig:block>
+        <twig:block name="body">
+            {% for role in roles %}
+                <tr>
+                    <twig:Td>
+                        <twig:Badge variant="{{ role.name == 'admin' ? 'accent' : 'neutral' }}">{{ role.name }}</twig:Badge>
+                    </twig:Td>
+                    <twig:Td>{{ role.permissionCount }}</twig:Td>
+                    <twig:Td>{{ role.userCount }}</twig:Td>
+                    <twig:Td>
+                        <twig:Link href="{{ path('admin_role_edit', {id: role.id}) }}">Edit permissions</twig:Link>
+                        {% if role.name != 'admin' %}
+                            <form action="{{ path('admin_role_delete', {id: role.id}) }}" method="post">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-role-' ~ role.id) }}">
+                                <twig:Button variant="danger">Delete</twig:Button>
+                            </form>
+                        {% endif %}
+                    </twig:Td>
+                </tr>
+            {% endfor %}
+        </twig:block>
+    </twig:Table>
+{% endblock %}

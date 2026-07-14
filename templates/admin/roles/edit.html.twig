@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin — Role {{ role.name }}{% endblock %}
+
+{% block body %}
+    <twig:Layout:AdminNav active="roles" />
+    <twig:PageHeader title="Permissions of «{{ role.name }}»" />
+
+    <twig:Card>
+        <form action="{{ path('admin_role_edit', {id: role.id}) }}" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token('role-permissions-' ~ role.id) }}">
+
+            {% for group, permissions in groups %}
+                <twig:Subheading text="{{ group }}" />
+                {% for permission in permissions %}
+                    <twig:CheckboxField
+                        label="{{ permission.value }}"
+                        description="{{ permission.label }}"
+                        name="permissions[]"
+                        value="{{ permission.value }}"
+                        checked="{{ permission.value in role.permissions }}"
+                    />
+                {% endfor %}
+            {% endfor %}
+
+            <twig:FormActions>
+                <twig:Button>Save permissions</twig:Button>
+                <twig:Button variant="ghost" href="{{ path('admin_roles') }}">Cancel</twig:Button>
+            </twig:FormActions>
+        </form>
+    </twig:Card>
+{% endblock %}

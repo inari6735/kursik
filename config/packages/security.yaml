@@ -4,10 +4,15 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
     providers:
+        # Password login loads the entity (explicit loader in FormLoginAuthenticator).
         app_users:
             entity:
                 class: App\User\Domain\User
                 property: email
+        # JWT requests build the user from token claims — no database query.
+        jwt_users:
+            lexik_jwt:
+                class: App\Access\Infrastructure\Security\TokenUser
 
     firewalls:
         dev:
@@ -18,7 +23,7 @@ security:
             lazy: true
             # The whole app authenticates via JWT in an HttpOnly cookie — no sessions.
             stateless: true
-            provider: app_users
+            provider: jwt_users
             custom_authenticators:
                 - App\User\Infrastructure\Security\FormLoginAuthenticator
             # Lexik: verifies the JWT extracted from the AUTH_TOKEN cookie.
@@ -29,12 +34,13 @@ security:
                 path: /logout
                 enable_csrf: true
 
-    # Note: Only the *first* matching rule is applied
+    # Note: Only the *first* matching rule is applied.
+    # Course mutations are guarded by PermissionVoter in the controllers
+    # (denyAccessUnlessGranted('course.*')) — not by path rules.
     access_control:
         - { path: ^/(login|register)$, roles: PUBLIC_ACCESS }
         - { path: ^/logout$, roles: PUBLIC_ACCESS }
-        - { path: ^/courses/new, roles: ROLE_USER }
-        - { path: ^/courses/[^/]+/(rename|publish), roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: PUBLIC_ACCESS }
 
 when@test:

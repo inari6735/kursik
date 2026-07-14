@@ -2,6 +2,7 @@
 
 namespace App\User\Infrastructure\Security;
 
+use App\User\Domain\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,7 @@ final class FormLoginAuthenticator extends AbstractLoginFormAuthenticator
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly JwtCookieFactory $cookieFactory,
+        private readonly UserRepository $users,
     ) {
     }
 
@@ -32,7 +34,9 @@ final class FormLoginAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email),
+            // Explicit loader: the firewall provider is now the JWT payload provider,
+            // but password login must verify against the entity.
+            new UserBadge($email, $this->users->byEmail(...)),
             new PasswordCredentials($request->getPayload()->getString('_password')),
             [new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token'))],
         );

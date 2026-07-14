@@ -7,7 +7,9 @@
 
     <h1>Courses</h1>
 
-    <p><a href="{{ path('course_new') }}">Create a new course</a></p>
+    {% if is_granted('course.create') %}
+        <p><a href="{{ path('course_new') }}">Create a new course</a></p>
+    {% endif %}
 
     {% if courses is empty %}
         <p>No courses yet. The list is projected asynchronously — if you just created one, make sure the worker is running (<code>php bin/console messenger:consume async</code>) and refresh.</p>

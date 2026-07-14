@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin — Users{% endblock %}
+
+{% block body %}
+    <twig:Layout:AdminNav active="users" />
+    <twig:PageHeader title="Users" />
+
+    <twig:Table>
+        <twig:block name="head">
+            <twig:Th>Email</twig:Th>
+            <twig:Th>Roles</twig:Th>
+            <twig:Th />
+        </twig:block>
+        <twig:block name="body">
+            {% for user in users %}
+                <tr>
+                    <twig:Td>{{ user.email }}</twig:Td>
+                    <twig:Td>
+                        {% for role in user.roles %}
+                            <twig:Badge variant="{{ role == 'admin' ? 'accent' : 'neutral' }}">{{ role }}</twig:Badge>
+                        {% else %}
+                            &mdash;
+                        {% endfor %}
+                    </twig:Td>
+                    <twig:Td>
+                        <twig:Link href="{{ path('admin_user_roles', {id: user.id}) }}">Edit roles</twig:Link>
+                    </twig:Td>
+                </tr>
+            {% endfor %}
+        </twig:block>
+    </twig:Table>
+{% endblock %}

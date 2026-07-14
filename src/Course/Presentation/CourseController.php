@@ -8,6 +8,7 @@ use App\Course\Application\Command\RenameCourse;
 use App\Course\Application\Query\CourseDetail;
 use App\Course\Application\Query\FindCourse;
 use App\Course\Application\Query\ListCourses;
+use App\Access\Domain\Permission;
 use App\Course\Domain\CourseId;
 use App\Course\Domain\Exception\CourseAlreadyPublished;
 use App\Course\Presentation\Form\CourseType;
@@ -39,6 +40,8 @@ final class CourseController extends AbstractController
     #[Route('/courses/new', name: 'course_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted(Permission::CourseCreate->value);
+
         $form = $this->createForm(CourseType::class);
         $form->handleRequest($request);
 
@@ -64,6 +67,8 @@ final class CourseController extends AbstractController
     #[Route('/courses/{id}/rename', name: 'course_rename', requirements: ['id' => Requirement::UUID], methods: ['GET', 'POST'])]
     public function rename(string $id, Request $request): Response
     {
+        $this->denyAccessUnlessGranted(Permission::CourseRename->value);
+
         $course = $this->findCourseOr404($id);
 
         $form = $this->createForm(CourseType::class, [
@@ -93,6 +98,8 @@ final class CourseController extends AbstractController
     #[Route('/courses/{id}/publish', name: 'course_publish', requirements: ['id' => Requirement::UUID], methods: ['POST'])]
     public function publish(string $id, Request $request): Response
     {
+        $this->denyAccessUnlessGranted(Permission::CoursePublish->value);
+
         if (!$this->isCsrfTokenValid('publish-course-'.$id, $request->getPayload()->getString('_token'))) {
             $this->addFlash('error', 'Invalid CSRF token.');
 

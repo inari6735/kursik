@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin — Roles of {{ user.email }}{% endblock %}
+
+{% block body %}
+    <twig:Layout:AdminNav active="users" />
+    <twig:PageHeader title="Roles of {{ user.email }}" />
+
+    <twig:Card>
+        <form action="{{ path('admin_user_roles', {id: user.id}) }}" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token('assign-roles-' ~ user.id) }}">
+
+            {% for role in roles %}
+                <twig:CheckboxField
+                    label="{{ role.name }}"
+                    description="{{ role.permissionCount }} permission(s)"
+                    name="roles[]"
+                    value="{{ role.name }}"
+                    checked="{{ role.name in user.roles }}"
+                />
+            {% endfor %}
+
+            <twig:FormActions>
+                <twig:Button>Save roles</twig:Button>
+                <twig:Button variant="ghost" href="{{ path('admin_users') }}">Cancel</twig:Button>
+            </twig:FormActions>
+        </form>
+    </twig:Card>
+{% endblock %}

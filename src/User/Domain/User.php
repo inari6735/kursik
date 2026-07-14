@@ -61,6 +61,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return array_values(array_unique([...$this->roles, 'ROLE_USER']));
+        $symfonyRoles = array_map(
+            static fn (string $name): string => 'ROLE_'.strtoupper($name),
+            $this->roles,
+        );
+
+        return array_values(array_unique([...$symfonyRoles, 'ROLE_USER']));
+    }
+
+    /**
+     * Raw role-entity names as stored (e.g. ["admin"]) — the Access context
+     * resolves them to permissions.
+     *
+     * @return list<string>
+     */
+    public function roleNames(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param list<string> $names
+     */
+    public function assignRoleNames(array $names): void
+    {
+        $this->roles = array_values(array_unique($names));
     }
 }

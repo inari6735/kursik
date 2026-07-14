@@ -68,5 +68,15 @@ services:
 
     App\User\Domain\UserRepository: '@App\User\Infrastructure\DoctrineUserRepository'
 
+    # Access module: Domain holds the Role entity and Permission enum (not services).
+    App\Access\:
+        resource: '../src/Access/'
+        exclude:
+            - '../src/Access/Domain/'
+
+    App\Access\Domain\RoleRepository: '@App\Access\Infrastructure\DoctrineRoleRepository'
+    App\Access\Application\UserRoleAssignments: '@App\Access\Infrastructure\DbalUserRoleAssignments'
+    App\Access\Application\Query\AccessReadModel: '@App\Access\Infrastructure\ReadModel\DbalAccessReadModel'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

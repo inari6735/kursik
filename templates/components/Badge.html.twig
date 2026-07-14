@@ -1,0 +1,12 @@
+{% props variant = 'neutral' %}
+
+{% set variants = {
+    neutral: 'bg-zinc-100 text-zinc-700',
+    accent: 'bg-accent-soft text-accent',
+    draft: 'bg-status-draft-soft text-status-draft',
+    published: 'bg-status-published-soft text-status-published',
+} %}
+
+<span {{ attributes.defaults({class: 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' ~ variants[variant]|default(variants.neutral)}) }}>
+    {%- block content %}{% endblock -%}
+</span>
