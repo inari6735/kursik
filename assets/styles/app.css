@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Full-page decorative backdrop; --color-background stays underneath as the
+   fallback while the image loads. AssetMapper rewrites the relative url(). */
+@layer base {
+    body {
+        background-image: url('../images/background.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+}
+
 /*
  * Design tokens — the only source of project-specific colors and fonts.
  * Rule 7: components use these (and the standard Tailwind scale), never raw values.
