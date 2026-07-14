@@ -14,6 +14,8 @@ final readonly class RenameCourse implements Command
         #[Assert\Length(max: 255)]
         public string $title,
         public string $description,
+        #[Assert\Json]
+        public ?string $content = null,
     ) {
     }
 }

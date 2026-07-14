@@ -1,0 +1,60 @@
+{# Renders Editor.js block data (course.content). Inline HTML from the editor
+   (b/i/a…) passes through the app.course_content sanitizer. #}
+{% props blocks = null %}
+
+{% if blocks is not null and blocks.blocks is defined %}
+    {# break-words: unbroken strings (URLs, code, keyboard mashing) must wrap
+       at the column edge instead of overflowing in one line. #}
+    <div class="space-y-4 break-words">
+        {% for block in blocks.blocks %}
+            {% if 'paragraph' == block.type %}
+                <p class="text-base leading-relaxed">{{ block.data.text|sanitize_html('app.course_content') }}</p>
+            {% elseif 'header' == block.type %}
+                {% set level = block.data.level|default(2) %}
+                {% set sizes = {2: 'text-h3', 3: 'text-h4', 4: 'text-h5'} %}
+                <h{{ level }} class="{{ sizes[level]|default('text-h5') }} text-ink">{{ block.data.text|sanitize_html('app.course_content') }}</h{{ level }}>
+            {% elseif 'list' == block.type %}
+                {% set tag = 'ordered' == block.data.style|default('unordered') ? 'ol' : 'ul' %}
+                <{{ tag }} class="{{ 'ol' == tag ? 'list-decimal' : 'list-disc' }} space-y-1 pl-6 text-base">
+                    {% for item in block.data.items %}
+                        <li>{{ (item.content is defined ? item.content : item)|sanitize_html('app.course_content') }}</li>
+                    {% endfor %}
+                </{{ tag }}>
+            {% elseif 'image' == block.type %}
+                {% set url = block.data.file.url|default('') %}
+                {% if url starts with '/uploads/' %}
+                    <figure>
+                        <img src="{{ url }}" alt="{{ block.data.caption|default('')|striptags }}"
+                             class="max-w-full rounded-xl border border-zinc-200 shadow-sm" loading="lazy">
+                        {% if block.data.caption|default('') is not empty %}
+                            <figcaption class="mt-1 text-sm text-zinc-500">{{ block.data.caption|sanitize_html('app.course_content') }}</figcaption>
+                        {% endif %}
+                    </figure>
+                {% endif %}
+            {% elseif 'attaches' == block.type %}
+                {% set url = block.data.file.url|default('') %}
+                {% if url starts with '/uploads/' %}
+                    <a href="{{ url }}" download
+                       class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 shadow-sm transition hover:border-primary/60 hover:shadow-md">
+                        <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-xs font-bold uppercase text-accent">
+                            {{- block.data.file.extension|default('file') -}}
+                        </span>
+                        <span class="min-w-0">
+                            <span class="block truncate text-base font-semibold text-ink">{{ block.data.title|default(block.data.file.name|default('Attachment')) }}</span>
+                            {% if block.data.file.size|default(0) > 0 %}
+                                <span class="block text-xs text-zinc-500">{{ (block.data.file.size / 1024)|round }} KB</span>
+                            {% endif %}
+                        </span>
+                    </a>
+                {% endif %}
+            {% elseif 'quote' == block.type %}
+                <blockquote class="rounded-r-xl border-l-4 border-primary bg-accent-soft px-4 py-3 text-base italic">
+                    {{ block.data.text|sanitize_html('app.course_content') }}
+                    {% if block.data.caption|default('') is not empty %}
+                        <footer class="mt-1 text-sm not-italic text-zinc-500">{{ block.data.caption|sanitize_html('app.course_content') }}</footer>
+                    {% endif %}
+                </blockquote>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

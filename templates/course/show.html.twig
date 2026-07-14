@@ -1,34 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ course.title }}{% endblock %}
+{% block title %}{{ course.title }} — kursik{% endblock %}
 
-{% block body %}
-    {% include 'course/_flashes.html.twig' %}
+{% block main %}
+    <twig:ContentColumn>
+        <twig:PageHeader title="{{ course.title }}">
+            <twig:block name="actions">
+                {% if course.status == 'draft' %}
+                    {% if is_granted('course.rename') %}
+                        <twig:Button variant="ghost" href="{{ path('course_rename', {id: course.id}) }}">Edit</twig:Button>
+                    {% endif %}
+                    {% if is_granted('course.publish') %}
+                        <form action="{{ path('course_publish', {id: course.id}) }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('publish-course-' ~ course.id) }}">
+                            <twig:Button>Publish</twig:Button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </twig:block>
+        </twig:PageHeader>
 
-    <p><a href="{{ path('course_index') }}">&larr; Back to courses</a></p>
-
-    <h1>{{ course.title }}</h1>
-
-    <p><strong>Status:</strong> {{ course.status }}</p>
-    <p><strong>Created:</strong> {{ course.createdAt|date('Y-m-d H:i') }}</p>
-    {% if course.publishedAt %}
-        <p><strong>Published:</strong> {{ course.publishedAt|date('Y-m-d H:i') }}</p>
-    {% endif %}
-
-    {% if course.description is not empty %}
-        <p>{{ course.description|nl2br }}</p>
-    {% endif %}
-
-    {% if course.status == 'draft' %}
-        {% if is_granted('course.rename') %}
-            <p><a href="{{ path('course_rename', {id: course.id}) }}">Rename</a></p>
+        {% if course.content %}
+            <twig:Course:Content :blocks="course.content" />
+        {% else %}
+            <twig:Muted>This course has no content yet.</twig:Muted>
         {% endif %}
-
-        {% if is_granted('course.publish') %}
-            <form action="{{ path('course_publish', {id: course.id}) }}" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token('publish-course-' ~ course.id) }}">
-                <button type="submit">Publish</button>
-            </form>
-        {% endif %}
-    {% endif %}
+    </twig:ContentColumn>
 {% endblock %}

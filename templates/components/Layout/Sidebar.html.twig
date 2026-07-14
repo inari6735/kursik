@@ -1,0 +1,34 @@
+{% set route = app.request.attributes.get('_route') ?? '' %}
+
+<aside class="flex w-full flex-col border-b border-zinc-200 bg-white md:sticky md:top-0 md:h-screen md:w-64 md:shrink-0 md:border-b-0 md:border-r">
+    <a href="{{ path('course_index') }}" class="flex items-center gap-3 px-4 py-4 text-base font-bold text-secondary">
+        <img src="{{ asset('images/logo_64x64.svg') }}" alt="" class="size-16" width="64" height="64">
+        kursik
+    </a>
+
+    <nav class="flex flex-col gap-1 px-3 py-2">
+        <twig:Layout:SidebarLink href="{{ path('course_index') }}" active="{{ route starts with 'course_' }}">
+            Courses
+        </twig:Layout:SidebarLink>
+        {% if is_granted('ROLE_ADMIN') %}
+            <twig:Layout:SidebarLink href="{{ path('admin_users') }}" active="{{ route starts with 'admin_' }}">
+                Admin
+            </twig:Layout:SidebarLink>
+        {% endif %}
+    </nav>
+
+    <div class="border-t border-zinc-200 px-4 py-4 md:mt-auto">
+        {% if app.user %}
+            <p class="mb-3 truncate text-sm text-zinc-500" title="{{ app.user.userIdentifier }}">{{ app.user.userIdentifier }}</p>
+            <form action="{{ logout_path() }}" method="post">
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('logout') }}">
+                <twig:Button variant="ghost" fullWidth>Log out</twig:Button>
+            </form>
+        {% else %}
+            <div class="flex flex-col gap-2">
+                <twig:Button href="{{ path('app_login') }}" variant="ghost" fullWidth>Log in</twig:Button>
+                <twig:Button href="{{ path('app_register') }}" fullWidth>Register</twig:Button>
+            </div>
+        {% endif %}
+    </div>
+</aside>

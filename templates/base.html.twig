@@ -23,10 +23,18 @@
         {% endif %}
     </head>
     <body class="min-h-screen bg-background font-sans text-ink antialiased">
-        <twig:Layout:Nav />
-        <main class="mx-auto max-w-5xl px-4 py-8">
-            <twig:Layout:Flashes />
-            {% block body %}{% endblock %}
-        </main>
+        {% block layout %}
+            <div class="flex min-h-screen flex-col md:flex-row">
+                <twig:Layout:Sidebar />
+                <main class="min-w-0 flex-1 px-4 py-8 md:px-8">
+                    {% block main %}
+                        <div class="mx-auto max-w-5xl">
+                            <twig:Layout:Flashes />
+                            {% block body %}{% endblock %}
+                        </div>
+                    {% endblock %}
+                </main>
+            </div>
+        {% endblock %}
     </body>
 </html>

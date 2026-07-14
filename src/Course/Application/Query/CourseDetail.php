@@ -11,6 +11,8 @@ final readonly class CourseDetail
         public string $status,
         public \DateTimeImmutable $createdAt,
         public ?\DateTimeImmutable $publishedAt,
+        /** @var array{blocks: list<array<string, mixed>>}|null Editor.js block data */
+        public ?array $content = null,
     ) {
     }
 }

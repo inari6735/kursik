@@ -28,4 +28,10 @@ return [
     '@symfony/stimulus-bundle' => ['path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js'],
     '@hotwired/turbo' => ['version' => '8.0.23'],
     '@symfony/ux-live-component' => ['path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js'],
+    '@editorjs/editorjs' => ['path' => './assets/lib/editorjs.mjs'],
+    '@editorjs/header' => ['version' => '2.8.9'],
+    '@editorjs/list' => ['version' => '2.0.9'],
+    '@editorjs/quote' => ['version' => '2.7.6'],
+    '@editorjs/image' => ['version' => '2.10.3'],
+    '@editorjs/attaches' => ['version' => '1.3.2'],
 ];

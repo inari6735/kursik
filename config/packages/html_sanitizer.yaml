@@ -1,0 +1,17 @@
+framework:
+    html_sanitizer:
+        sanitizers:
+            # Inline formatting produced by Editor.js tools; everything else is stripped.
+            app.course_content:
+                allow_elements:
+                    b: []
+                    i: []
+                    u: []
+                    mark: ['class']
+                    code: []
+                    br: []
+                    a: ['href', 'target', 'rel']
+                allowed_link_schemes: ['http', 'https', 'mailto']
+                force_attributes:
+                    a:
+                        rel: 'noopener noreferrer'

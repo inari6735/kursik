@@ -1,36 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Courses{% endblock %}
+{% block title %}Courses — kursik{% endblock %}
 
 {% block body %}
-    {% include 'course/_flashes.html.twig' %}
-
-    <h1>Courses</h1>
-
-    {% if is_granted('course.create') %}
-        <p><a href="{{ path('course_new') }}">Create a new course</a></p>
-    {% endif %}
+    <twig:PageHeader title="Courses">
+        <twig:block name="actions">
+            {% if is_granted('course.create') %}
+                <twig:Button href="{{ path('course_new') }}">New course</twig:Button>
+            {% endif %}
+        </twig:block>
+    </twig:PageHeader>
 
     {% if courses is empty %}
-        <p>No courses yet. The list is projected asynchronously — if you just created one, make sure the worker is running (<code>php bin/console messenger:consume async</code>) and refresh.</p>
+        <twig:EmptyState title="No courses yet" message="Create your first course to get started.">
+            {% if is_granted('course.create') %}
+                <twig:Button href="{{ path('course_new') }}">Create a course</twig:Button>
+            {% endif %}
+        </twig:EmptyState>
     {% else %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for course in courses %}
-                    <tr>
-                        <td><a href="{{ path('course_show', {id: course.id}) }}">{{ course.title }}</a></td>
-                        <td>{{ course.status }}</td>
-                        <td>{{ course.createdAt|date('Y-m-d H:i') }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <twig:CardGrid>
+            {% for course in courses %}
+                <twig:Course:Card :course="course" />
+            {% endfor %}
+        </twig:CardGrid>
     {% endif %}
 {% endblock %}

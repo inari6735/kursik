@@ -2,6 +2,7 @@
 
 namespace App\Course\Application\Command;
 
+use App\Course\Application\EditorJsContent;
 use App\Course\Domain\Course;
 use App\Course\Domain\CourseId;
 use App\Course\Domain\CourseRepository;
@@ -24,6 +25,7 @@ final readonly class CreateCourseHandler
             $command->title,
             $command->description,
             $this->clock->now(),
+            EditorJsContent::decode($command->content),
         );
 
         $this->courses->save($course);

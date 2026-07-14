@@ -41,7 +41,9 @@ security:
         - { path: ^/(login|register)$, roles: PUBLIC_ACCESS }
         - { path: ^/logout$, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/, roles: PUBLIC_ACCESS }
+        # Everything else requires login — anonymous visitors are sent to /login
+        # by the entry point (FormLoginAuthenticator).
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

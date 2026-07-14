@@ -31,10 +31,13 @@ class Course
         private \DateTimeImmutable $createdAt,
         #[ORM\Column(type: Types::DATETIMETZ_IMMUTABLE, nullable: true)]
         private ?\DateTimeImmutable $publishedAt = null,
+        /** @var array{blocks: list<array<string, mixed>>}|null Editor.js block data */
+        #[ORM\Column(type: Types::JSON, nullable: true)]
+        private ?array $content = null,
     ) {
     }
 
-    public static function create(CourseId $id, string $title, string $description, \DateTimeImmutable $now): self
+    public static function create(CourseId $id, string $title, string $description, \DateTimeImmutable $now, ?array $content = null): self
     {
         return new self(
             Uuid::fromString($id->toString()),
@@ -42,10 +45,11 @@ class Course
             $description,
             CourseStatus::Draft,
             $now,
+            content: $content,
         );
     }
 
-    public function rename(string $title, string $description): void
+    public function rename(string $title, string $description, ?array $content = null): void
     {
         if (CourseStatus::Published === $this->status) {
             throw CourseAlreadyPublished::withId($this->id());
@@ -53,6 +57,7 @@ class Course
 
         $this->title = self::validatedTitle($title);
         $this->description = $description;
+        $this->content = $content;
     }
 
     public function publish(\DateTimeImmutable $now): void
@@ -93,6 +98,11 @@ class Course
     public function publishedAt(): ?\DateTimeImmutable
     {
         return $this->publishedAt;
+    }
+
+    public function content(): ?array
+    {
+        return $this->content;
     }
 
     private static function validatedTitle(string $title): string

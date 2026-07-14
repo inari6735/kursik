@@ -48,7 +48,7 @@ final class CourseController extends AbstractController
             $data = $form->getData();
             $id = CourseId::generate();
 
-            $this->commandBus->dispatch(new CreateCourse($id->toString(), $data['title'], $data['description']));
+            $this->commandBus->dispatch(new CreateCourse($id->toString(), $data['title'], $data['description'], $data['content'] ?: null));
             $this->addFlash('success', 'Course created.');
 
             return $this->redirectToRoute('course_show', ['id' => $id->toString()]);
@@ -73,6 +73,7 @@ final class CourseController extends AbstractController
         $form = $this->createForm(CourseType::class, [
             'title' => $course->title,
             'description' => $course->description,
+            'content' => null !== $course->content ? json_encode($course->content, \JSON_THROW_ON_ERROR) : '',
         ]);
         $form->handleRequest($request);
 
@@ -80,7 +81,7 @@ final class CourseController extends AbstractController
             $data = $form->getData();
 
             try {
-                $this->commandBus->dispatch(new RenameCourse($id, $data['title'], $data['description']));
+                $this->commandBus->dispatch(new RenameCourse($id, $data['title'], $data['description'], $data['content'] ?: null));
                 $this->addFlash('success', 'Course renamed.');
             } catch (CourseAlreadyPublished) {
                 $this->addFlash('error', 'A published course cannot be renamed.');

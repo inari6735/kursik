@@ -20,7 +20,7 @@ final readonly class CourseReadModelRepository implements CourseReadModel
     public function find(string $courseId): ?CourseDetail
     {
         $row = $this->connection->fetchAssociative(
-            'SELECT id, title, description, status, created_at, published_at FROM courses WHERE id = :id',
+            'SELECT id, title, description, status, created_at, published_at, content FROM courses WHERE id = :id',
             ['id' => $courseId],
         );
 
@@ -35,6 +35,7 @@ final readonly class CourseReadModelRepository implements CourseReadModel
             $row['status'],
             new \DateTimeImmutable($row['created_at']),
             null !== $row['published_at'] ? new \DateTimeImmutable($row['published_at']) : null,
+            null !== $row['content'] ? json_decode($row['content'], true, flags: \JSON_THROW_ON_ERROR) : null,
         );
     }
 

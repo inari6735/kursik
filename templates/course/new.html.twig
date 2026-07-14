@@ -1,17 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New course{% endblock %}
+{% block title %}New course — kursik{% endblock %}
 
 {% block body %}
-    {% include 'course/_flashes.html.twig' %}
+    <twig:PageHeader title="New course" />
 
-    <p><a href="{{ path('course_index') }}">&larr; Back to courses</a></p>
+    <twig:Card>
+        {{ form_start(form) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
 
-    <h1>New course</h1>
+            <twig:EditorField label="Content" uploadUrl="{{ path('course_image_upload') }}" attachUrl="{{ path('course_file_upload') }}">
+                {{ form_widget(form.content, {attr: {'data-editor-target': 'input'}}) }}
+            </twig:EditorField>
 
-    {{ form_start(form) }}
-        {{ form_row(form.title) }}
-        {{ form_row(form.description) }}
-        <button type="submit">Create</button>
-    {{ form_end(form) }}
+            <twig:FormActions>
+                <twig:Button>Create course</twig:Button>
+                <twig:Button variant="ghost" href="{{ path('course_index') }}">Cancel</twig:Button>
+            </twig:FormActions>
+        {{ form_end(form) }}
+    </twig:Card>
 {% endblock %}

@@ -1,0 +1,12 @@
+{# Editor.js field: the page drops the (hidden) form widget into the slot with
+   data-editor-target="input"; the editor mounts on the holder below. #}
+{% props label = 'Content', uploadUrl = null, attachUrl = null %}
+
+<div class="mb-4 space-y-1.5" data-controller="editor"
+     {%- if uploadUrl %} data-editor-upload-url-value="{{ uploadUrl }}"{% endif %}
+     {%- if attachUrl %} data-editor-attach-url-value="{{ attachUrl }}"{% endif %}>
+    <span class="block text-sm font-medium text-zinc-700">{{ label }}</span>
+    {% block content %}{% endblock %}
+    <div data-editor-target="holder"
+         class="min-h-48 rounded-xl border border-primary/60 bg-white px-4 py-3 shadow-sm focus-within:border-accent"></div>
+</div>
